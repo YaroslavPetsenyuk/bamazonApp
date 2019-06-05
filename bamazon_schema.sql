@@ -10,6 +10,7 @@ CREATE TABLE products (
   department_name VARCHAR(100),
   price DEC(10,4) NOT NULL,
   stock_quantity INT(10) NOT NULL
+  PRIMARY KEY (item_id)
 );
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
@@ -23,7 +24,7 @@ VALUES
 ("Golf Equipment", "Sporting", 278.85, 70),
 ("iPhone Covers", "Accesories", 19.95, 58),
 ("Motorolla Screen Protectors", "Accesories", 112.68, 20),
-("Cracking the Coding Interview", "Books", 19.99, 28)
+("Cracking the Coding Interview", "Books", 19.99, 28);
 
 
 

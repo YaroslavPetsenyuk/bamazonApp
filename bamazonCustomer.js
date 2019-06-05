@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "",
+    password: "root",
     database: "bamazon"
 });
 connection.connect(function (err) {
@@ -22,7 +22,7 @@ connection.connect(function (err) {
 
 function showProducts() {
     console.log("Here is what we have in the store...\n");
-    connection.query("SELECT * FROM bamazon", function (err, res) {
+    connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
 
         for (var i = 0; i < res.length; i++) {
@@ -36,11 +36,9 @@ function showProducts() {
         }
         console.log("-----------------------------------------------------")
 
+        userPrompt();
     });
 
-    userPrompt();
-
-    connection.end();
 };
 
 function userPrompt() {
@@ -60,5 +58,12 @@ function userPrompt() {
         var entered_quantity = user_entry.amount;
 
         userOrder(entered_id, entered_quantity);
-    })
-}
+
+
+    });
+
+    function userOrder() {
+        console.log("Blaaaahahahhaahha")
+
+    }
+};
