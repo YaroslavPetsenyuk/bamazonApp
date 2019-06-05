@@ -4,13 +4,10 @@ var inquirer = require("inquirer");
 var connection = mysql.createConnection({
     host: "localhost",
 
-    // Your port; if not 3306
     port: 3306,
 
-    // Your username
     user: "root",
 
-    // Your password
     password: "root",
     database: "bamazon"
 });
@@ -44,26 +41,57 @@ function showProducts() {
 function userPrompt() {
     inquirer.prompt([
         {
-            name: "id_number",
+            name: "input_id",
             type: "input",
             message: "Please enter the ID number of the item that you would like to purchase :"
         },
         {
-            name: "amount",
+            name: "input_amount",
             type: "input",
             message: "How many items would you like to purchase?"
         }
-    ]).then(function (user_entry) {
-        var entered_id = user_entry.id_number;
-        var entered_quantity = user_entry.amount;
+    ]).then(function (userOrder) {
+        connection.query("SELECT * FROM products WHERE item_id=?", userOrder.input_id, function (err, res) {
+            for (var i = 0; i < res.length; i++) {
+                if (userOrder.input_amount > res[i].stock_quantity) {
+                    console.log("Sorry, the stock of this item is less then what you have entered");
+                }
+                else {
+                    console.log("These items are in stock and we are processing your order now.")
+                    console.log("You have selected: " + userOrder.input_amount + res[i].product_name);
+                    console.log("Your total purchase price is: " + res[i].price * userOrder.input_amount);
 
-        userOrder(entered_id, entered_quantity);
+                    var newItemStock = (res[i].stock_quantity - userOrder.input_amount);
+                    console.log(newItemStock);
 
+                    var newPurchaseID = (userOrder.input_id);
+                    console.log(newPurchaseID);
 
+                    updateDB(newItemStock, newPurchaseID);
+                }
+                function updateDB(newItemStock) {
+                    connection.query("UPDATE products SET stock_quantity = " + newItemStock + " WHERE item_id = " + newPurchaseID);
+                    console.log("Your order has been processed. Please look out for an email confirmation in your inmail box.");
+                    console.log("Thank you for your order !");
+
+                    seeStoreAgain();
+                };
+
+                function seeStoreAgain() {
+                    inquirer.prompt([
+                        {
+                            type: "confirm",
+                            name: "buyAnother",
+                            message: "Would you like to go back to the Store?",
+                            default: true
+                        }
+                    ]).then(function (confirmation) {
+                        if (confirmation.buyAnother === true) {
+                            showProducts();
+                        };
+                    });
+                };
+            };
+        });
     });
-
-    function userOrder() {
-        console.log("Blaaaahahahhaahha")
-
-    }
 };
