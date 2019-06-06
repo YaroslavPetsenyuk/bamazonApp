@@ -58,14 +58,12 @@ function userPrompt() {
                 }
                 else {
                     console.log("These items are in stock and we are processing your order now.")
-                    console.log("You have selected: " + userOrder.input_amount + res[i].product_name);
+                    console.log("You have selected: " + userOrder.input_amount + " " + res[i].product_name);
                     console.log("Your total purchase price is: " + res[i].price * userOrder.input_amount);
 
                     var newItemStock = (res[i].stock_quantity - userOrder.input_amount);
-                    console.log(newItemStock);
 
                     var newPurchaseID = (userOrder.input_id);
-                    console.log(newPurchaseID);
 
                     updateDB(newItemStock, newPurchaseID);
                 }
